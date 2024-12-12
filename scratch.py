@@ -1,3 +1,4 @@
-from scapy.all import Ether, ARP
-print(Ether)
-print(ARP)
+from spoofing_services import *
+
+enableIPRoute()
+print(getMac("", "Wi-Fi"))

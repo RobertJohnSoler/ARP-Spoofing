@@ -3,8 +3,8 @@ import time
 
 
 # if __name__ == "main":
-target_ip = "something"
-gateway_ip = "something"
+target_ip = ""
+gateway_ip = ""
 enableIPRoute()
 
 try:
