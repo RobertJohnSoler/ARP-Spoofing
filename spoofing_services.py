@@ -26,10 +26,10 @@ def spoof(target_ip, spoofed_ip):
     print("Spoofed ARP sent to ", target_ip, ".")
 
 
-def unspoof(target_ip, gateway_ip):
+def unspoof(target_ip, real_ip):
     target_mac = getMac(target_ip)
-    gateway_mac = getMac(gateway_ip)
-    unspoofing_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=gateway_ip, hwsrc=gateway_mac, op=2)
+    real_mac = getMac(real_ip)
+    unspoofing_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=real_ip, hwsrc=real_mac, op=2)
     send(unspoofing_arp, verbose=1, count=7)
     print("Original ARPs restrored.")
 
