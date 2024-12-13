@@ -35,13 +35,18 @@ class Spoofer:
 
     def __init__(self, con_mode):
         self.connection_mode = con_mode
+        self.interface = ""
+        if self.connection_mode == "wifi":
+            self.interface = input("Please enter your wifi interface: ")
+        elif self.connection_mode == "eth":
+            pass
+
 
     def spoof(self, target_ip, spoofed_ip):
         
         target_mac = ""
         if self.connection_mode == "wifi":
-            interface = input("Please enter your wifi interface: ")
-            target_mac = getMac(target_ip, interface)
+            target_mac = getMac(target_ip, self.interface)
         elif self.connection_mode == "eth":
             target_mac = getMac(target_ip)
 

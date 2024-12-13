@@ -1,4 +1,4 @@
 from spoofing_services import *
 
-enableIPRoute("Windows")
-print(getMac(""))
+enableIPRoute("Linux")
+print(getMac("","wlan0"))
