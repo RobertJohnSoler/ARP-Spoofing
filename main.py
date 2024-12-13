@@ -5,7 +5,7 @@ import time
 # if __name__ == "main":
 target_ip = ""
 gateway_ip = ""
-enableIPRoute()
+enableIPRoute("Linux")
 
 try:
     while True:
