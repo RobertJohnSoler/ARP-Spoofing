@@ -39,7 +39,7 @@ def main():
     gateway_ip = args.gateway_ip
     con_mode = args.con_mode
 
-    enableIPRoute("Windows")
+    enableIPRoute("Linux")
 
     try:
         spoofer = Spoofer(con_mode)
