@@ -1,10 +1,8 @@
 from scapy.all import Ether, ARP, srp, send
-import time
-import os
-import sys
 
 
 def enableIPRoute(os):
+    print("OS detected: ", os)
     if os == "Windows":
         from windows_ip_router import IP_Router
         router = IP_Router()

