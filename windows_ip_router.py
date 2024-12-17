@@ -34,15 +34,5 @@ class IP_Router:
         elif not self.isRunning():
             print("Remote access is currently not running yet!")
 
-    def restart(self):
-        if self.isRunning():
-            win32serviceutil.RestartService(self.service)
-            time.sleep(2)
-            if self.isRunning():
-                print("Remote access service successfully restarted. IP routing is enabled.")
-            else:
-                print("Error restarting remote access service.")
-        elif not self.isRunning():
-            print("Remote access service hasn't even been started yet! Please start it first.")
 
 

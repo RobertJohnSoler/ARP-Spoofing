@@ -52,6 +52,7 @@ def main():
         print("Restoring the network, please wait...")
         spoofer.unspoof(target_ip, gateway_ip)  # tell the target who the gateway really is
         spoofer.unspoof(gateway_ip, target_ip)  # tell the gateway who the target really is
+        disableIPRoute(os)
 
 if __name__ == "__main__":
     main()
