@@ -5,6 +5,7 @@ import sys
 import platform
 
 
+# Function to display the usage of this code and parse the given arguments from the command line
 def parse_args():
 
     if len(sys.argv) == 1:
@@ -42,12 +43,12 @@ def main():
     con_mode = args.con_mode
     op_mode = args.op_mode
 
-    enableIPRoute(os)
+    enableIPRoute(os)   # enable IP routing depending on the operating system running this code
 
     try:
         spoofer = Spoofer(con_mode, op_mode)
         while True:
-            spoofer.spoof(target_ip, gateway_ip)    # like to the target saying that the gateway's IP is a non-existent one
+            spoofer.spoof(target_ip, gateway_ip)    # lie to the target saying that the gateway's IP is us or a non-existent one (depending on the op_mode)
             spoofer.spoof(gateway_ip, target_ip)    # lie to the gateway saying that we are the target
             time.sleep(1)
     except KeyboardInterrupt:
