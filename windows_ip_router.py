@@ -12,6 +12,7 @@ class IP_Router:
     def isRunning(self):
         return win32serviceutil.QueryServiceStatus(self.service)[1] == 4
     
+    # Function to tell your machine to enable IP routing (if it's Windows)
     def start(self):
         if not self.isRunning():
             win32serviceutil.StartService(self.service)
@@ -23,6 +24,7 @@ class IP_Router:
         elif self.isRunning():
             print(f"{self.service} is already running!")
 
+    # Function to tell your machine to disable IP routing (if it's Windows)
     def stop(self):
         if self.isRunning():
             win32serviceutil.StopService(self.service)
