@@ -12,7 +12,7 @@ The attack in this repo is supported on Windows and Linux.
 2. Run these commands to install the required dependencies:
 ```
     pip install scapy
-    pip install pywin32
+    pip install pywin32 (if you're using a Windows machine)
 ```
 3. Enable routing on your computer (for Windows machines only). 
     - On the Windows search bar, search for and open services.msc.
