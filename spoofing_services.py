@@ -10,7 +10,7 @@ def enableIPRoute(os):
         print("IP routing enabled.")
     elif os == "Linux":
         from linux_ip_router import Linux_IP_Router
-        router = Linux_IP_Router
+        router = Linux_IP_Router()
         router.start()
         print("IP routing enabled.")
     else:
@@ -26,7 +26,7 @@ def disableIPRoute(os):
         print("IP routing disabled.")
     elif os == "Linux":
         from linux_ip_router import Linux_IP_Router
-        router = Linux_IP_Router
+        router = Linux_IP_Router()
         router.stop()
         print("IP routing disabled.")
     else:
