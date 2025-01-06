@@ -4,7 +4,7 @@ import time
 
 # This class is responsible for enable ip routing in the attacker's computer
 
-class IP_Router:
+class Windows_IP_Router:
 
     def __init__(self):
         self.service = "RemoteAccess"

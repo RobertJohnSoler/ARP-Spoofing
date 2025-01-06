@@ -4,13 +4,14 @@ from scapy.all import ARP, Ether, send, srp
 def enableIPRoute(os):
     print("OS detected: ", os)
     if os == "Windows":
-        from windows_ip_router import IP_Router
-        router = IP_Router()
+        from windows_ip_router import Windows_IP_Router
+        router = Windows_IP_Router()
         router.start()
         print("IP routing enabled.")
     elif os == "Linux":
-        from linux_ip_router import enable_linux_iproute
-        enable_linux_iproute()
+        from linux_ip_router import Linux_IP_Router
+        router = Linux_IP_Router
+        router.start()
         print("IP routing enabled.")
     else:
         print("This code does not support the given OS :(")
@@ -19,13 +20,14 @@ def enableIPRoute(os):
 
 def disableIPRoute(os):
     if os == "Windows":
-        from windows_ip_router import IP_Router
-        router = IP_Router()
+        from windows_ip_router import Windows_IP_Router
+        router = Windows_IP_Router()
         router.stop()
         print("IP routing disabled.")
     elif os == "Linux":
-        from linux_ip_router import disable_linux_iproute
-        disable_linux_iproute()
+        from linux_ip_router import Linux_IP_Router
+        router = Linux_IP_Router
+        router.stop()
         print("IP routing disabled.")
     else:
         print("This code does not support the given OS :(")
