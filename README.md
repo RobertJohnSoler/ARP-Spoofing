@@ -14,11 +14,7 @@ The attack in this repo is supported on Windows and Linux.
     pip install scapy
     pip install pywin32 (if you're using a Windows machine)
 ```
-3. Enable routing on your computer (for Windows machines only). 
-    - On the Windows search bar, search for and open services.msc.
-    - Locate "Routing and Remote Access", right-click it, select Properties.
-    - Change the startup type to either manual or automatic. Make sure it isn't disabled.
-    - Click Apply and then Ok, then close the window.
+3. Make sure you are running this code as admin (in Windows) or sudo (in Linux)
 
 ## Options
 Below are the different options you can use when running this script:
